@@ -10,36 +10,54 @@
  I affirm that the creation and modification
  of this program is primarily my own work.
 ------------------------------------------------*/
+#include <stdint.h>
+#define HALT_OPCODE 0x19
 
 /**
  * Registers simulated as global variables
  */
 
 // 16 bit Program Counter. Address of next instruction
-int pc = 0;
+uint16_t pc = 0;
 
 // 8 bit Instruction Register. Contains current instruction
-int ir = 0;
+uint8_t ir = 0;
 
 // 16 bit Memory Address Register. Holds pointer to address in memory.
-int mar = 0;
+uint16_t mar = 0;
 
 // 8 bit Accumulator. Used to operate on data.
-int acc = 0;
+uint8_t acc = 0;
 
-// memory array [65536]
+// memory array
+unsigned char memory[65536];
+
 
 /**
+ * @param No input.
+ * @return No returns.
  * Uses program counter as index of memory array. Stores instruction from memory into instruction register.
  * Increases program counter to point at the next instruction.
  */
-fetchNextInstruction(){
+void fetchNextInstruction(void){
 
 }
 
 /**
+ * @param No input.
+ * @return No returns.
  * Examines ir and determines execution opertion. Performs operation on registers and memory.
  */
-executeInstruction(){
+void executeInstruction(void){
 
+}
+
+int main(int argc, char* argv[]){
+    // Execution loop. Continue fetching and executing until program counter
+    // points to a HALT instruction.
+    while(memory[pc] != HALT_OPCODE){
+        fetchNextInstruction();
+        executeInstruction();
+    }
+    return 0;
 }
