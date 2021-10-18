@@ -38,7 +38,14 @@ unsigned char memory[65536];
  * Increases program counter to point at the next instruction.
  */
 void fetchNextInstruction(void){
+    ir = memory[pc++];
 
+    /*
+    // if instruction register is blank operation
+    if(ir == NOP_CODE){
+        ir = memory[pc++];
+    }
+    */
 }
 
 /**
