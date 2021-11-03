@@ -38,8 +38,53 @@ unsigned char memory[65536];
  * Increases program counter to point at the next instruction.
  */
 void fetchNextInstruction(void){
-    ir = memory[pc++];
+    ir = memory[pc++]; 
+ //Michael Hall wrote an outline for this currently.
+    //Right, made an initial format.  I've got this loaded into my text editor, just pushing changes.
+ //I swear if this breaks something.  IT SHOULDN'T, although it's untested. 
+ //Im still kinda wondering about where PC will increment?  Maybe ill figure it out.  
+ if(ir & 0x80 == 0x80){ //Checks for math/ logic operations  && is going to be stupidly useful, since I can check individual bits.  
+	
+    switch(ir & 0x0c){ //Looks at the last two bits of the first 4 and checks where it goes: && with ir since those are the only bits its' looking for.  
+    // This checks the first half of the first hex bit
+    //All the statements inside will check the last two.  
+      case 0x00: // Sets the destination as indirect, mar. since its 0000
+      //Putting another switch here to look at the first 2 of the first 4, so it's something like ir && 03? 
+       break;
 
+      case 0x04: // Sets the destination as an acc  since 0100
+      //Putting another switch here to look at the first 2, so it's something like ir && 03? 
+
+       break;
+      case 0x08: // Sets the destination to Address register mar since it's 1000
+      //Putting another switch here to look at the first 2, so it's something like ir && 03? 
+
+       break;
+      case 0x0c: // Sets the destination to Memory, since it's 1100
+
+       //Putting another switch here to look at the first 2, so it's something like ir && 03? 
+
+       break;
+
+      default:
+        //This state shouldn't happen
+       break;
+		} //Going from verilog to C makes me want to put 'begin' and 'end' everywhere smh.  
+	}//All of the functions above are generally the same, since it's branching into different statments considering what ever the first 4 bits are. 
+else if((ir & 0xf0) == 0){
+ 
+} //Grabbing this from her QnA document.  Basically it checks if ir && with all ones, it's a mem op
+ 
+ //Putting code designating a NOP stamtent
+ /*else if(ir && 0x18){ Commented since I don't know if it's correct?
+     pc++;
+} *\
+
+
+
+//The memory functions is going to be below this, and will be structered similary, probably.  
+//Gonna compare 0f, since documents show that's memory ops
+//Ill think about memory later.  
     /*
     // if instruction register is blank operation
     if(ir == NOP_CODE){
