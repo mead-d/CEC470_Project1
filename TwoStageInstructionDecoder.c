@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #define HALT_OPCODE 0x19
+#define NOP_CODE 0x18
 
 // Registers simulated as global variables
 
@@ -43,61 +44,202 @@ void fetchNextInstruction(void){
     //Right, made an initial format.  I've got this loaded into my text editor, just pushing changes.
  //I swear if this breaks something.  IT SHOULDN'T, although it's untested. 
  //Im still kinda wondering about where PC will increment?  Maybe ill figure it out.  
+	
  if(ir & 0x80 == 0x80){ //Checks for math/ logic operations  && is going to be stupidly useful, since I can check individual bits.  
 	
+	 
     switch(ir & 0x0c){ //Looks at the last two bits of the first 4 and checks where it goes: && with ir since those are the only bits its' looking for.  
     // This checks the first half of the first hex bit
     //All the statements inside will check the last two.  
+		    
       case 0x00: // Sets the destination as indirect, mar. since its 0000
-      //Putting another switch here to look at the first 2 of the first 4, so it's something like ir && 03? 
+		
+	switch(ir & 0x03){ 
+   	 	  case 0: // Indirect *mar
+		    
+	   		break;
+							
+		   case 1: // accumulator acc
+		    
+			   break;
+							
+		   case 2: // Constant
+						
+		  	 pc++;
+				    
+			break;
+								
+		   case 3: // Memory
+			
+			pc += 2;
+		    
+			break;
+							
+		   default:
+		    
+			break;					
+		}
+		    
        break;
 
       case 0x04: // Sets the destination as an acc  since 0100
-      //Putting another switch here to look at the first 2, so it's something like ir && 03? 
+		    
+	      switch(ir & 0x03){ 
+			  case 0: // Indirect *mar
+
+				break;
+
+			   case 1: // accumulator acc
+
+				   break;
+
+			   case 2: // Constant
+
+				 pc++;
+
+				break;
+
+			   case 3: // Memory
+
+				pc += 2;
+
+				break;
+
+			   default:
+
+				break;					
+		} 
 
        break;
+		    
       case 0x08: // Sets the destination to Address register mar since it's 1000
-      //Putting another switch here to look at the first 2, so it's something like ir && 03? 
+		    
+	      switch(ir & 0x03){ 
+			  case 0: // Indirect *mar
+
+				break;
+
+			   case 1: // accumulator acc
+
+				   break;
+
+			   case 2: // Constant
+
+			       pc++;
+
+				break;
+
+			   case 3: // Memory
+
+				pc += 2;
+
+				break;
+
+			   default:
+
+				break;					
+		}
 
        break;
+		    
       case 0x0c: // Sets the destination to Memory, since it's 1100
 
-       //Putting another switch here to look at the first 2, so it's something like ir && 03? 
+     	  switch(ir & 0x03){ 
+			  case 0: // Indirect *mar
+
+				break;
+
+			   case 1: // accumulator acc
+
+				   break;
+
+			   case 2: // constant
+
+				 pc++;
+
+				break;
+
+			   case 3: // memory
+
+				pc += 2;
+
+				break;
+
+			   default:
+
+				break;					
+		}
 
        break;
 
       default:
         //This state shouldn't happen
        break;
-		} //Going from verilog to C makes me want to put 'begin' and 'end' everywhere smh.  
+	      } //Going from verilog to C makes me want to put 'begin' and 'end' everywhere.
+	 
 	}//All of the functions above are generally the same, since it's branching into different statments considering what ever the first 4 bits are. 
+	//It's deciding what it's destination is, and what the source is, and where that's going
+	
 else if((ir & 0xf0) == 0){
+	//Since it's Mem op, The bits being compared is only 3
+	
+	switch(ir & 0x07){ //Commands are written infront of the case: 
+		
+		case 0: // Register = accumulator acc | Method = Operand is used as address
+			pc += 2;
+			
+			break;
+			
+		case 1: // Register = accumulator AAC | Method = Operand is used as a constant
+			pc++;				
+		
+			break;
+				
+		case 2: // Register = accumulator acc | Method = Indirect *mar
+			
+			break;
+				
+			//No case 3 since that's not a command
+		case 4: // Register = Index register mar | Method = Operand is used as address
+			pc += 2;
+			
+			break;
+				
+		case 5: // Register = Index register mar | Method = Operand is used as a constant
+			pc += 2;
+			
+			break;
+				
+		case 6: // Register = Index register mar | Method = Indirect *mar
+			break;
+				
+		default:
+			
+			break;	
+			
+		} //Also didn't know where to put load and store?
  
 } //Grabbing this from her QnA document.  Basically it checks if ir && with all ones, it's a mem op
+
+else if((ir & 0xf8) == 0x10){ //This initiates branching statements
+	
+	 pc +=2;
+ }
  
- //Putting code designating a NOP stamtent
- /*else if(ir && 0x18){ Commented since I don't know if it's correct?
+ //Putting code designating a NOP CODE stamtent
+ else if(ir == NOP_CODE){ //Do nothing, increment PC
+	 
      pc++;
-} *\
-
-
-
-//The memory functions is going to be below this, and will be structered similary, probably.  
-//Gonna compare 0f, since documents show that's memory ops
-//Ill think about memory later.  
-    /*
-    // if instruction register is blank operation
-    if(ir == NOP_CODE){
-        ir = memory[pc++];
-    }
-    */
-}
+   } 
+}//I believe this is everything needed?
+//I'd love to know if I'm wrong, there's plenty of things I could have missed.
 
 /**
  * @param No input.
  * @return No return.
  * Examines ir and determines execution opertion. Performs operation on registers and memory.
  */
+//You could potentially use getfetch code, considering it DOSE ulitizes roughly the same format
 void executeInstruction(void){
 
 }
