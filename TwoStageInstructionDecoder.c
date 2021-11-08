@@ -10,18 +10,24 @@
  I affirm that the creation and modification
  of this program is primarily my own work.
 ------------------------------------------------*/
+
+// Mead Start
 #include <stdint.h>
 #include <stdio.h>
+
 #define HALT_OPCODE 0x19
 #define NOP_CODE 0x18
+#define MEM_SIZE 65536
 
 // Registers simulated as global variables
+// Mead End
 
 //Ranew Start
 // 16 bit  old Program Counter. Address of last instruction
 uint16_t old_pc = 0;
 //Ranew Stop
 
+// Mead Start
 // 16 bit Program Counter. Address of next instruction
 uint16_t pc = 0;
 
@@ -35,7 +41,7 @@ uint16_t mar = 0;
 uint8_t acc = 0;
 
 // memory array
-unsigned char memory[65536];
+unsigned char memory[MEM_SIZE];
 
 /**
  * @param No input.
@@ -44,199 +50,199 @@ unsigned char memory[65536];
  * Increases program counter to point at the next instruction.
  */
 void fetchNextInstruction(void){
-    ir = memory[pc++]; 
- //Michael Hall wrote below:
-   
+    ir = memory[pc++];
+// Mead End
+
+ //Michael Hall wrote below:   
  //I swear if this breaks something. 
 	
- if(ir & 0x80 == 0x80){ //Checks for math/ logic operations  && is going to be stupidly useful, since I can check individual bits.  
+	if(ir & 0x80 == 0x80){ //Checks for math/ logic operations  && is going to be stupidly useful, since I can check individual bits.  
 	
 	 
-    switch(ir & 0x0c){ //Looks at the last two bits of the first 4 and checks where it goes: && with ir since those are the only bits its' looking for.  
-    // This checks the first half of the first hex bit
-    //All the statements inside will check the last two.  
+    	switch(ir & 0x0c){ //Looks at the last two bits of the first 4 and checks where it goes: && with ir since those are the only bits its' looking for.  
+    	// This checks the first half of the first hex bit
+    	//All the statements inside will check the last two.  
 		    
-      case 0x00: // Sets the destination as indirect, mar. since its 0000
+    		case 0x00: // Sets the destination as indirect, mar. since its 0000
 		
-	switch(ir & 0x03){ 
-   	 	  case 0: // Indirect *mar
+				switch(ir & 0x03){ 
+   	 	  			case 0: // Indirect *mar
 		    
-	   		break;
+	   					break;
 							
-		   case 1: // accumulator acc
-		    
-			   break;
+					case 1: // accumulator acc
+
+						break;
 							
-		   case 2: // Constant
+		   			case 2: // Constant
 						
-		  	 pc++;
+		  				pc++;
 				    
-			break;
+						break;
 								
-		   case 3: // Memory
+		   			case 3: // Memory
 			
-			pc += 2;
+						pc += 2;
 		    
-			break;
+						break;
 							
-		   default:
+		   			default:
 		    
-			break;					
-		}
+						break;					
+				}
 		    
-       break;
+       		break;
 
-      case 0x04: // Sets the destination as an acc  since 0100
+      		case 0x04: // Sets the destination as an acc  since 0100
 		    
-	      switch(ir & 0x03){ 
-			  case 0: // Indirect *mar
+	      		switch(ir & 0x03){ 
+			  		case 0: // Indirect *mar
 
-				break;
+						break;
 
-			   case 1: // accumulator acc
+			   		case 1: // accumulator acc
 
-				   break;
+						break;
 
-			   case 2: // Constant
+			   		case 2: // Constant
 
-				 pc++;
+						pc++;
 
-				break;
+						break;
 
-			   case 3: // Memory
+			   		case 3: // Memory
 
-				pc += 2;
+						pc += 2;
 
-				break;
+						break;
 
-			   default:
+			   		default:
 
-				break;					
-		} 
+						break;					
+				} 
 
-       break;
+       		break;
 		    
-      case 0x08: // Sets the destination to Address register mar since it's 1000
+      		case 0x08: // Sets the destination to Address register mar since it's 1000
 		    
-	      switch(ir & 0x03){ 
-			  case 0: // Indirect *mar
+	      		switch(ir & 0x03){ 
+			  		case 0: // Indirect *mar
 
-				break;
+						break;
 
-			   case 1: // accumulator acc
+			   		case 1: // accumulator acc
 
-				   break;
+				   		break;
 
-			   case 2: // Constant
+			   		case 2: // Constant
 
-			       pc++;
+			    		pc++;
 
-				break;
+						break;
 
-			   case 3: // Memory
+			   		case 3: // Memory
 
-				pc += 2;
+						pc += 2;
 
-				break;
+						break;
 
-			   default:
+			   		default:
 
-				break;					
-		}
+						break;					
+				}
 
-       break;
+       		break;
 		    
-      case 0x0c: // Sets the destination to Memory, since it's 1100
+      		case 0x0c: // Sets the destination to Memory, since it's 1100
 
-     	  switch(ir & 0x03){ 
-			  case 0: // Indirect *mar
+     	  		switch(ir & 0x03){ 
+			  		case 0: // Indirect *mar
 
-				break;
+						break;
 
-			   case 1: // accumulator acc
+			   		case 1: // accumulator acc
 
-				   break;
+				   		break;
 
-			   case 2: // constant
+			   		case 2: // constant
 
-				 pc++;
+				 		pc++;
 
-				break;
+						break;
 
-			   case 3: // memory
+			   		case 3: // memory
 
-				pc += 2;
+						pc += 2;
 
-				break;
+						break;
 
-			   default:
+			   		default:
 
-				break;					
-		}
+						break;					
+				}
 
-       break;
+       		break;
 
-      default:
-        //This state shouldn't happen
-       break;
-	      } //Going from verilog to C makes me want to put 'begin' and 'end' everywhere.
+      		default:
+        		//This state shouldn't happen
+       			break;
+		} //Going from verilog to C makes me want to put 'begin' and 'end' everywhere.
 	 
 	}//All of the functions above are generally the same, since it's branching into different statments considering what ever the first 4 bits are. 
 	//It's deciding what it's destination is, and what the source is, and where that's going
 	
-else if((ir & 0xf0) == 0){
+	else if((ir & 0xf0) == 0){
 	//Since it's Mem op, The bits being compared is only 3
 	
-	switch(ir & 0x07){ //Commands are written infront of the case: 
+		switch(ir & 0x07){ //Commands are written infront of the case: 
 		
-		case 0: // Register = accumulator acc | Method = Operand is used as address
-			pc += 2;
+			case 0: // Register = accumulator acc | Method = Operand is used as address
+				pc += 2;
 			
-			break;
+				break;
 			
-		case 1: // Register = accumulator AAC | Method = Operand is used as a constant
-			pc++;				
+			case 1: // Register = accumulator AAC | Method = Operand is used as a constant
+				pc++;				
 		
-			break;
+				break;
 				
-		case 2: // Register = accumulator acc | Method = Indirect *mar
-			
-			break;
+			case 2: // Register = accumulator acc | Method = Indirect *mar
+
+				break;
 				
 			//No case 3 since that's not a command
-		case 4: // Register = Index register mar | Method = Operand is used as address
-			pc += 2;
+			case 4: // Register = Index register mar | Method = Operand is used as address
+				pc += 2;
 			
-			break;
+				break;
 				
-		case 5: // Register = Index register mar | Method = Operand is used as a constant
-			pc += 2;
+			case 5: // Register = Index register mar | Method = Operand is used as a constant
+				pc += 2;
 			
-			break;
+				break;
 				
-		case 6: // Register = Index register mar | Method = Indirect *mar
-			break;
+			case 6: // Register = Index register mar | Method = Indirect *mar
+				break;
 				
-		default:
-			
-			break;	
+			default:
+				break;	
 			
 		} //Also didn't know where to put load and store?
  
-} //Grabbing this from her QnA document.  Basically it checks if ir && with all ones, it's a mem op
+	} //Grabbing this from her QnA document.  Basically it checks if ir && with all ones, it's a mem op
 
-else if((ir & 0xf8) == 0x10){ //This initiates branching statements
+	else if((ir & 0xf8) == 0x10){ //This initiates branching statements
 	
-	 pc +=2;
- }
- 
- //Putting code designating a NOP CODE stamtent
- else if(ir == NOP_CODE){ //Do nothing, increment PC
-	 
-     pc++;
-   } 
-}//I believe this is everything needed?
-//I'd love to know if I'm wrong, there's plenty of things I could have missed.
+	 	pc +=2;
+ 	} //I believe this is everything needed?
+	//I'd love to know if I'm wrong, there's plenty of things I could have missed.
+	//Michael Hall Finish
+
+ 	// Mead Start
+ 	else if(ir == NOP_CODE){ //Do nothing, store next instruction
+		ir = memory[pc++];
+   	} 
+}
 
 /**
  * @param No input.
@@ -245,6 +251,8 @@ else if((ir & 0xf8) == 0x10){ //This initiates branching statements
  */
 //You could potentially use getfetch code, considering it DOSE ulitizes roughly the same format
 void executeInstruction(void){
+// Mead End
+
 //Ranew Start
     int address;
 
@@ -465,6 +473,7 @@ void executeInstruction(void){
 	}
 } // Ranew End
 
+// Mead Start
 int main(int argc, char* argv[]){
     // File reader transfers info from memory file to memory array.
     if(argc != 3) {
@@ -486,5 +495,18 @@ int main(int argc, char* argv[]){
         fetchNextInstruction();
         executeInstruction();
     }
+
+	mem_out = fopen(argv[2], "w");
+
+	for(int i = 0; i < MEM_SIZE; i++){
+		fprintf(mem_out, "%02x ", memory[i]);
+
+		if((i + 1) % 16 ==0){
+			fprintf(mem_out, "\n");
+		}
+	}
+	fclose(mem_out);
+
     return 0;
 }
+// Mead End
