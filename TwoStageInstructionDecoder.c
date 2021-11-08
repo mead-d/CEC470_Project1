@@ -17,6 +17,11 @@
 
 // Registers simulated as global variables
 
+//Ranew Start
+// 16 bit  old Program Counter. Address of last instruction
+uint16_t old_pc = 0;
+//Ranew Stop
+
 // 16 bit Program Counter. Address of next instruction
 uint16_t pc = 0;
 
