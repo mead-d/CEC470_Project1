@@ -40,10 +40,9 @@ unsigned char memory[65536];
  */
 void fetchNextInstruction(void){
     ir = memory[pc++]; 
- //Michael Hall wrote an outline for this currently.
-    //Right, made an initial format.  I've got this loaded into my text editor, just pushing changes.
- //I swear if this breaks something.  IT SHOULDN'T, although it's untested. 
- //Im still kinda wondering about where PC will increment?  Maybe ill figure it out.  
+ //Michael Hall wrote below:
+   
+ //I swear if this breaks something. 
 	
  if(ir & 0x80 == 0x80){ //Checks for math/ logic operations  && is going to be stupidly useful, since I can check individual bits.  
 	
